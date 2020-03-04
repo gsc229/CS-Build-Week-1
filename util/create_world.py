@@ -35,11 +35,5 @@ r_treasure.connectRooms(r_narrow, "s")
 
 players = Player.objects.all()
 for p in players:
-<< << << < HEAD
-p.currentRoom = r_outside.id
-p.save()
-== == == =
-p.currentRoom = r_outside.id
-p.save()
-
->>>>>> > 3231e152f11c08e4baa0c986543f05e3086d0ac5
+    p.currentRoom = r_outside.id
+    p.save()
