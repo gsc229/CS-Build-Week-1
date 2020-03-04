@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import django_heroku
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 import os
-from decouple import config
+from decouple import config, Csv
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -117,7 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
@@ -130,7 +131,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -154,7 +155,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-import django_heroku
 django_heroku.settings(locals())
 
-# del DATABASES['default']['OPTIONS']['sslmode']
+del DATABASES['default']['OPTIONS']['sslmode']
