@@ -64,6 +64,24 @@ def rooms(request):
     # w.print_rooms()
 
     return JsonResponse({'num_rooms': len(room_data), 'rooms': room_data}, safe=True)
+    #room = player.room()
+    # water_rooms = Room.objects.filter(water=room.water) #
+    # water_map = {#
+    #     "water": room.water,
+    #     "rooms": [{
+    #         'id': i.id,
+    #         'x': i.coord_x,
+    #         'y': i.coord_y,
+    #         'north': i.north,
+    #         'south': i.south,
+    #         'east': i.east,
+    #         'west': i.west
+    #     } for i in water_rooms]
+    # }#
+    # rooms_visited = PlayerVisited.objects.filter(player=player)#
+    # visited_list = [i.room.id for i in rooms_visited]#
+    # players = room.playerNames(player_id)
+    # return JsonResponse({'uuid': uuid, 'name':player.user.username, 'room_id':room.id, 'title':room.title, 'description':room.description, 'players':players}, safe=True) #
 
 
 # @csrf_exempt
@@ -78,6 +96,7 @@ def move(request):
     data = json.loads(request.body)
     direction = data['direction']
     room = player.room()
+    # add items here if we want them
     nextRoomID = None
     if direction == "n":
         nextRoomID = room.n_to
@@ -91,9 +110,18 @@ def move(request):
         nextRoom = Room.objects.get(id=nextRoomID)
         player.currentRoom = nextRoomID
         player.save()
+
+        description = nextRoom.description
+        if player.hasVisited(nextRoom) and nextRoom.description_b:
+            description = nextRoom.description_b
+        if not player.hasVisited(nextRoom):
+            PlayerVisited.objects.create(player=player, room=room)
         players = nextRoom.playerNames(player_id)
         currentPlayerUUIDs = room.playerUUIDs(player_id)
         nextPlayerUUIDs = nextRoom.playerUUIDs(player_id)
+        # rooms_visited = PlayerVisited.objects.filter(player=player)
+        # visited_list = [i.room.id for i in rooms_visited]#
+
         # for p_uuid in currentPlayerUUIDs:
         #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has walked {dirs[direction]}.'})
         # for p_uuid in nextPlayerUUIDs:
@@ -101,7 +129,12 @@ def move(request):
         return JsonResponse({'name': player.user.username, 'title': nextRoom.title, 'description': nextRoom.description, 'players': players, 'error_msg': ""}, safe=True)
     else:
         players = room.playerNames(player_id)
-        return JsonResponse({'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players, 'error_msg': "You cannot move that way."}, safe=True)
+
+
+return JsonResponse({'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players, 'error_msg': "You cannot move that way."}, safe=True)
+
+# if player.hasVisited(room) and room.description_b:#
+#     description = nextRoom.description_b#
 
 
 @csrf_exempt

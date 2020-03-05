@@ -46,6 +46,12 @@ class Room(models.Model):
     def playerUUIDs(self, currentPlayerID):
         return [p.uuid for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
 
+    # add another function if we want to add items
+
+# class Water(models.Model): #
+#     title = models.CharField(max_length=50, default='DEFAULT TITLE')
+#     description = models.CharField(max_length=500, default='DEFAULT DESCRIPTION')
+
 
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -63,6 +69,24 @@ class Player(models.Model):
         except Room.DoesNotExist:
             self.initialize()
             return self.room()
+
+    # def hasVisited(self, room): #
+    #     try:
+    #         return PlayerVisited.objects.get(player=self, room=room)
+    #     except PlayerVisited.DoesNotExist:
+    #         return False
+
+    # add function if we want to add items
+
+# class PlayerVisited(models.Model): #
+#     player = models.ForeignKey(
+#         'Player',
+#         on_delete=models.CASCADE
+#     )
+#     room = models.ForeignKey(
+#         'Room',
+#         on_delete=models.CASCADE
+#     )
 
 
 @receiver(post_save, sender=User)
