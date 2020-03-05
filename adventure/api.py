@@ -30,6 +30,7 @@ def initialize(request):
 @api_view(["GET"])
 def rooms(request):
     print("RRRRRROOOOOOOOMMMMMMMMSSSSSSS!!!!!!!!!!!!!!")
+    Room.objects.all().delete()
     generated_rooms = RoomGenerator()
     num_rooms = 44
     width = 8
