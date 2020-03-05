@@ -6,14 +6,19 @@ from rest_framework.authtoken.models import Token
 import uuid
 
 
-
 class Room(models.Model):
     title = models.CharField(max_length=50, default="DEFAULT TITLE")
-    description = models.CharField(max_length=500, default="DEFAULT DESCRIPTION")
+    description = models.CharField(
+        max_length=500, default="DEFAULT DESCRIPTION")
     n_to = models.IntegerField(default=0)
     s_to = models.IntegerField(default=0)
     e_to = models.IntegerField(default=0)
     w_to = models.IntegerField(default=0)
+    x_c = models.IntegerField(default=0)
+    y_c = models.IntegerField(default=0)
+
+    def __str__(self):
+        return(f"{self.title} {self.description}")
 
     def connectRooms(self, destinationRoom, direction):
         destinationRoomID = destinationRoom.id
@@ -34,10 +39,10 @@ class Room(models.Model):
                 print("Invalid direction")
                 return
             self.save()
-    
+
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
-    
+
     def playerUUIDs(self, currentPlayerID):
         return [p.uuid for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
 
@@ -64,14 +69,14 @@ class Player(models.Model):
         except Room.DoesNotExist:
             self.initialize()
             return self.room()
-    
+
     # def hasVisited(self, room): #
     #     try:
     #         return PlayerVisited.objects.get(player=self, room=room)
     #     except PlayerVisited.DoesNotExist:
     #         return False
 
-    ## add function if we want to add items
+    # add function if we want to add items
 
 # class PlayerVisited(models.Model): #
 #     player = models.ForeignKey(
@@ -90,11 +95,7 @@ def create_user_player(sender, instance, created, **kwargs):
         Player.objects.create(user=instance)
         Token.objects.create(user=instance)
 
+
 @receiver(post_save, sender=User)
 def save_user_player(sender, instance, **kwargs):
     instance.player.save()
-
-
-
-
-
