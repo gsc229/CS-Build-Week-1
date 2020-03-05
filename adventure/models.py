@@ -14,14 +14,11 @@ class Room(models.Model):
     s_to = models.IntegerField(default=0)
     e_to = models.IntegerField(default=0)
     w_to = models.IntegerField(default=0)
-<<<<<<< HEAD
-=======
     x_c = models.IntegerField(default=0)
     y_c = models.IntegerField(default=0)
 
     def __str__(self):
         return(f"{self.title} {self.description}")
->>>>>>> 9680fe173f2c23f52982050d23ea4c362a75ebfc
 
     def connectRooms(self, destinationRoom, direction):
         destinationRoomID = destinationRoom.id
@@ -73,8 +70,6 @@ class Player(models.Model):
             self.initialize()
             return self.room()
 
-<<<<<<< HEAD
-=======
     # def hasVisited(self, room): #
     #     try:
     #         return PlayerVisited.objects.get(player=self, room=room)
@@ -93,7 +88,6 @@ class Player(models.Model):
 #         on_delete=models.CASCADE
 #     )
 
->>>>>>> 9680fe173f2c23f52982050d23ea4c362a75ebfc
 
 @receiver(post_save, sender=User)
 def create_user_player(sender, instance, created, **kwargs):
