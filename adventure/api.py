@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework.decorators import api_view
 import json
+from .room_generator import RoomGenerator
+
 
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
@@ -27,9 +29,34 @@ def initialize(request):
 
 @api_view(["GET"])
 def rooms(request):
-    rooms = Room.objects.all()
+    print("RRRRRROOOOOOOOMMMMMMMMSSSSSSS!!!!!!!!!!!!!!")
+    generated_rooms = RoomGenerator()
+    num_rooms = 44
+    width = 8
+    height = 7
+    generated_rooms.generate_rooms(width, height, num_rooms)
 
-    return JsonResponse({'rooms': rooms}, safe=True)
+    rooms = Room.objects.all()
+    room_data = []
+    for room in rooms:
+        room_data.append(
+            {"id": room.id, "title": room.title, "description": room.description, "north": room.n_to, "east": room.e_to, "south": room.s_to, "west": room.w_to, "x": room.x_c, "y": room.y_c})
+    """ 
+    w = World()
+    num_rooms = 44
+    width = 8
+    height = 7
+    w.generate_rooms(width, height, num_rooms)
+    w.print_rooms()
+    """
+    # w = World()
+    # num_rooms = 44
+    # width = 8
+    # height = 7
+    # w.generate_rooms(width, height, num_rooms)
+    # w.print_rooms()
+
+    return JsonResponse({'rooms': room_data}, safe=True)
 
 
 # @csrf_exempt

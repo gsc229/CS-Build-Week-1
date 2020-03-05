@@ -14,6 +14,8 @@ class Room(models.Model):
     s_to = models.IntegerField(default=0)
     e_to = models.IntegerField(default=0)
     w_to = models.IntegerField(default=0)
+    x_c = models.IntegerField(default=0)
+    y_c = models.IntegerField(default=0)
 
     def __str__(self):
         return(f"{self.title} {self.description}")
