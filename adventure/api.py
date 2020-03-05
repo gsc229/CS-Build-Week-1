@@ -130,8 +130,7 @@ def move(request):
     else:
         players = room.playerNames(player_id)
 
-
-return JsonResponse({'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players, 'error_msg': "You cannot move that way."}, safe=True)
+    return JsonResponse({'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players, 'error_msg': "You cannot move that way."}, safe=True)
 
 # if player.hasVisited(room) and room.description_b:#
 #     description = nextRoom.description_b#
