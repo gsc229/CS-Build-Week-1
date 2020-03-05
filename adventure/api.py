@@ -36,8 +36,8 @@ def rooms(request):
     Room.objects.all().delete()
     generated_rooms = RoomGenerator()
     num_rooms = 101
-    width = 10
-    height = 10
+    width = 20
+    height = 20
     generated_rooms.generate_rooms(width, height, num_rooms)
 
     rooms = Room.objects.all()
