@@ -17,6 +17,8 @@ from .room_generator import RoomGenerator
 @csrf_exempt
 @api_view(["GET"])
 def initialize(request):
+
+    # set the user
     user = request.user
     player = user.player
     player_id = player.id
@@ -30,11 +32,12 @@ def initialize(request):
 @api_view(["GET"])
 def rooms(request):
     print("RRRRRROOOOOOOOMMMMMMMMSSSSSSS!!!!!!!!!!!!!!")
+    # create the rooms with the room_gen
     Room.objects.all().delete()
     generated_rooms = RoomGenerator()
-    num_rooms = 44
-    width = 8
-    height = 7
+    num_rooms = 101
+    width = 10
+    height = 10
     generated_rooms.generate_rooms(width, height, num_rooms)
 
     rooms = Room.objects.all()
@@ -57,7 +60,7 @@ def rooms(request):
     # w.generate_rooms(width, height, num_rooms)
     # w.print_rooms()
 
-    return JsonResponse({'rooms': room_data}, safe=True)
+    return JsonResponse({'num_rooms': len(room_data), 'rooms': room_data}, safe=True)
 
 
 # @csrf_exempt
