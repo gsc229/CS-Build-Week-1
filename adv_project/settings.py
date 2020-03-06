@@ -69,6 +69,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+CSRF_HEADER_NAME = 'X-CSRFToken'
+
 
 ROOT_URLCONF = 'adv_project.urls'
 
@@ -157,10 +159,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/staticfiles/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'staticfiles/img')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles/img')]
 
 django_heroku.settings(locals())
 
-#del DATABASES['default']['OPTIONS']['sslmode']
+del DATABASES['default']['OPTIONS']['sslmode']

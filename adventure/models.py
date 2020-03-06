@@ -4,6 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 import uuid
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 
 class Room(models.Model):
@@ -64,29 +67,37 @@ class Player(models.Model):
             self.save()
 
     def room(self):
+        print(
+            Fore.GREEN + f"*class Player def room: {Room.objects.get(id=self.currentRoom)} self.currentRoom: {self.currentRoom}" + Style.RESET_ALL)
         try:
             return Room.objects.get(id=self.currentRoom)
         except Room.DoesNotExist:
             self.initialize()
             return self.room()
 
-    # def hasVisited(self, room): #
-    #     try:
-    #         return PlayerVisited.objects.get(player=self, room=room)
-    #     except PlayerVisited.DoesNotExist:
-    #         return False
+    def hasVisited(self, room):
+        print(Fore.GREEN +
+              f"*class Player.hasVisited room: {room}" + Style.RESET_ALL)
+
+        try:
+            return PlayerVisited.objects.get(player=self, room=room)
+        except PlayerVisited.DoesNotExist:
+            print(Fore.RED + f"PlayerVisited FALSE" + Style.RESET_ALL)
+            return False
 
     # add function if we want to add items
 
-# class PlayerVisited(models.Model): #
-#     player = models.ForeignKey(
-#         'Player',
-#         on_delete=models.CASCADE
-#     )
-#     room = models.ForeignKey(
-#         'Room',
-#         on_delete=models.CASCADE
-#     )
+
+class PlayerVisited(models.Model):
+    print(Fore.GREEN + f"class PlayerVisted" + Style.RESET_ALL)
+    player = models.ForeignKey(
+        'Player',
+        on_delete=models.CASCADE
+    )
+    room = models.ForeignKey(
+        'Room',
+        on_delete=models.CASCADE
+    )
 
 
 @receiver(post_save, sender=User)
