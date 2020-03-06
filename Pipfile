@@ -17,7 +17,11 @@ django-rest-api = "*"
 psycopg2-binary = "*"
 dj-database-url = "*"
 whitenoise = "*"
+<<<<<<< HEAD
 colorama = "*"
+=======
+numpy = "*"
+>>>>>>> gabe-branch
 
 [dev-packages]
 pylint = "*"
