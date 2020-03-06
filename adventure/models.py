@@ -4,6 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 import uuid
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 
 class Room(models.Model):
@@ -65,7 +68,7 @@ class Player(models.Model):
 
     def room(self):
         print(
-            f"*class Player def room: {Room.objects.get(id=self.currentRoom)} self.currentRoom: {self.currentRoom}")
+            Fore.GREEN + f"*class Player def room: {Room.objects.get(id=self.currentRoom)} self.currentRoom: {self.currentRoom}" + Style.RESET_ALL)
         try:
             return Room.objects.get(id=self.currentRoom)
         except Room.DoesNotExist:
@@ -73,19 +76,20 @@ class Player(models.Model):
             return self.room()
 
     def hasVisited(self, room):
-        print(f"*class Player.hasVisited room: {room}")
+        print(Fore.GREEN +
+              f"*class Player.hasVisited room: {room}" + Style.RESET_ALL)
 
         try:
             return PlayerVisited.objects.get(player=self, room=room)
         except PlayerVisited.DoesNotExist:
-            print(f"PlayerVisited FAILED")
+            print(Fore.RED + f"PlayerVisited FALSE" + Style.RESET_ALL)
             return False
 
     # add function if we want to add items
 
 
 class PlayerVisited(models.Model):
-    print(f"class PlayerVisted")
+    print(Fore.GREEN + f"class PlayerVisted" + Style.RESET_ALL)
     player = models.ForeignKey(
         'Player',
         on_delete=models.CASCADE

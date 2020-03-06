@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 # from pusher import Pusher
@@ -8,6 +9,9 @@ from .models import *
 from rest_framework.decorators import api_view
 import json
 from .room_generator import RoomGenerator
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 
 # instantiate pusher
@@ -106,45 +110,60 @@ def move(request):
     dirs = {"n": "north", "s": "south", "e": "east", "w": "west"}
     reverse_dirs = {"n": "south", "s": "north", "e": "west", "w": "east"}
     player = request.user.player
+
     print(f"username: {request.user.username}")
     print(f"request.user.player (api move): {player}")
-    print(f"Room.objects.all(): {Room.objects.all()}")
+    print(f"type player: {type(player)} ")
+    print(
+        f"Player.objects.get(id=player.id): {Player.objects.get(id=player.id)}")
+
+    #print(f"Room.objects.all(): {Room.objects.all()}")
     print(f"Room.objects.all()[0].id: {Room.objects.all()[0].id}")
-    print(f"player.currentRoom: {player.currentRoom}")
+    print(f"\nplayer.currentRoom: {player.currentRoom}")
     print(f"Room.objects.get(): {Room.objects.get(id=player.currentRoom)}")
     player_id = player.id
     player_uuid = player.uuid
+
     data = json.loads(request.body)
     direction = data['direction']
     print(f"dirction (api move): {direction}")
 
     room = player.room()
-    print(f"player.room (api move): {room}")
+    print(f"player.room() (api move): {room}")
 
     # add items here if we want them
     nextRoomID = None
+    print(Fore.YELLOW)
     if direction == "n":
         nextRoomID = room.n_to
+        print(f"room.n_to: {nextRoomID}")
     elif direction == "s":
         nextRoomID = room.s_to
+        print(f"room.s_to: {nextRoomID}")
     elif direction == "e":
         nextRoomID = room.e_to
         print(f"room.e_to: {nextRoomID}")
     elif direction == "w":
         nextRoomID = room.w_to
+        print(f"room.w_to: {nextRoomID}")
+    print(Style.RESET_ALL)
 
     # DO something with the 'next room'
     if nextRoomID is not None and nextRoomID > 0:
         nextRoom = Room.objects.get(id=nextRoomID)
+        # player enters room
         player.currentRoom = nextRoomID
         player.save()
         description = nextRoom.description
 
+        # Still making use of nextRoom
         if player.hasVisited(nextRoom) and nextRoom.description_b:
             description = nextRoom.description_b
 
         if not player.hasVisited(nextRoom):
-            PlayerVisited.objects.create(player=player, room=room)
+            PlayerVisited.objects.create(player=player, room=nextRoom)
+        print(
+            Fore.GREEN + f"After if not player.hasVisited(nextRoom):  \nPlayerVisited.objects.create(player=player, room=room -->    \nplayer.hasVisited(nextRoom): {player.hasVisited(nextRoom)}" + Style.RESET_ALL)
 
         players = nextRoom.playerNames(player_id)
         currentPlayerUUIDs = room.playerUUIDs(player_id)
