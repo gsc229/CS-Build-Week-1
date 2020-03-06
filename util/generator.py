@@ -312,7 +312,7 @@ class World:
 
 
 
-world = World(15,15,100)
+'''world = World(15,15,100)
 world.generate()
 world.draw()
 nodes = []
@@ -343,4 +343,5 @@ if True:
         for item in nodes:
             file.write(str(item)+"\n")
     print(f"File saved to {os.getcwd()}\\Nodes.txt")
+    '''
 
