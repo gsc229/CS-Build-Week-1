@@ -165,4 +165,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles/img')]
 
 django_heroku.settings(locals())
 
-del DATABASES['default']['OPTIONS']['sslmode']
+#del DATABASES['default']['OPTIONS']['sslmode']
