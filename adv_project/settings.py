@@ -69,6 +69,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+CSRF_HEADER_NAME = 'X-CSRFToken'
+
 
 ROOT_URLCONF = 'adv_project.urls'
 

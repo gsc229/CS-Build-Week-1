@@ -64,29 +64,36 @@ class Player(models.Model):
             self.save()
 
     def room(self):
+        print(
+            f"*class Player def room: {Room.objects.get(id=self.currentRoom)} self.currentRoom: {self.currentRoom}")
         try:
             return Room.objects.get(id=self.currentRoom)
         except Room.DoesNotExist:
             self.initialize()
             return self.room()
 
-    # def hasVisited(self, room): #
-    #     try:
-    #         return PlayerVisited.objects.get(player=self, room=room)
-    #     except PlayerVisited.DoesNotExist:
-    #         return False
+    def hasVisited(self, room):
+        print(f"*class Player.hasVisited room: {room}")
+
+        try:
+            return PlayerVisited.objects.get(player=self, room=room)
+        except PlayerVisited.DoesNotExist:
+            print(f"PlayerVisited FAILED")
+            return False
 
     # add function if we want to add items
 
-# class PlayerVisited(models.Model): #
-#     player = models.ForeignKey(
-#         'Player',
-#         on_delete=models.CASCADE
-#     )
-#     room = models.ForeignKey(
-#         'Room',
-#         on_delete=models.CASCADE
-#     )
+
+class PlayerVisited(models.Model):
+    print(f"class PlayerVisted")
+    player = models.ForeignKey(
+        'Player',
+        on_delete=models.CASCADE
+    )
+    room = models.ForeignKey(
+        'Room',
+        on_delete=models.CASCADE
+    )
 
 
 @receiver(post_save, sender=User)
