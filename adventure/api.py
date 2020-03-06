@@ -179,7 +179,7 @@ def move(request):
             pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {
                            'message': f'{player.user.username} has entered from the {reverse_dirs[direction]}.'})
 
-        return JsonResponse({'name': player.user.username, 'title': nextRoom.title, 'description': nextRoom.description, 'players': players, 'error_msg': ""}, safe=True)
+        return JsonResponse({'name': player.user.username, 'room_id': nextRoom.id, 'title': nextRoom.title, 'description': nextRoom.description, 'players': players, 'error_msg': ""}, safe=True)
 
     else:
         players = room.playerNames(player_id)
