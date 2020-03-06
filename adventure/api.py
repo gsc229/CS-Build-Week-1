@@ -36,7 +36,7 @@ def initialize(request):
 
     players = room.playerNames(player_id)
     print("REQUEST: ", request)
-    return JsonResponse({'uuid': uuid, 'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players}, safe=True)
+    return JsonResponse({'uuid': uuid, 'name': player.user.username, 'title': room.title, 'description': room.description, 'players': players, 'room_id': room.id}, safe=True)
 
 
 @api_view(["GET"])
