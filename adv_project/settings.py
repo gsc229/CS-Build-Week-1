@@ -13,8 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import django_heroku
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 import os
-from decouple import config, Csv
+import environ
 import dj_database_url
+
+env = environ.Env()
+environ.Env.read_env()
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,10 +28,10 @@ SITE_ID = 1
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = env('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,23 +100,29 @@ WSGI_APPLICATION = 'adv_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+
+print('NAME: ', env('DATABASE_NAME'))
+
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'), conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT')
+    }
 }
 
-<<<<<<< HEAD
-=======
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 
->>>>>>> gabe-branch
+# DATABASES = {
+#     'default': dj_database_url.parse(env('DATABASE_URL'), conn_max_age=600)
+# }
+
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -170,11 +180,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles/img')]
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
 
-<<<<<<< HEAD
 #del DATABASES['default']['OPTIONS']['sslmode']
-=======
-del DATABASES['default']['OPTIONS']['sslmode']
 
->>>>>>> gabe-branch
