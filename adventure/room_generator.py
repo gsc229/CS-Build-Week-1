@@ -67,6 +67,7 @@ class RoomGenerator:
             # Update iteration variables
             previous_room = room
             room_count += 1
+        print("GRID: ",self.grid)
 
     def print_rooms(self):
         '''

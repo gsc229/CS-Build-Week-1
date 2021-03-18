@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from pusher import Pusher
 from django.http import JsonResponse
-#from decouple import config
+import environ
 from django.contrib.auth.models import User
-from .models import *
+from .models import Room, Player, PlayerVisited
 from rest_framework.decorators import api_view
 import json
 from .room_generator import RoomGenerator
@@ -13,21 +13,26 @@ import colorama
 from colorama import Fore, Back, Style
 colorama.init()
 
+env = environ.Env()
+environ.Env.read_env()
 
 # instantiate pusher
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(app_id=env('PUSHER_APP_ID'), key=env('PUSHER_KEY'), secret=env('PUSHER_SECRET'), cluster=env('PUSHER_CLUSTER'))
 
 
 @csrf_exempt
 @api_view(["GET"])
 def initialize(request):
     # create the rooms with the room_gen
-    Room.objects.all().delete()  # if they exist, delete existing rooms
-    generated_rooms = RoomGenerator()
+    print(len(Room.objects.all())) 
+    Room.objects.all().delete() # if they exist, delete existing rooms
+    
+    
     num_rooms = 101
     width = 20
     height = 20
-    generated_rooms.generate_rooms(width, height, num_rooms)
+    generated_rooms = RoomGenerator()
+    generated_rooms.generate_rooms(height, width, num_rooms)
     generated_rooms.print_rooms()
 
     # set the user
